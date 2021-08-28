@@ -19,7 +19,7 @@ def index():
     return render_template('index.html') 
 
 @shortener.route('/add_url', methods=['POST'])
-def add_link():
+def add_url():
     original_url = request.form['original_url']
     urls = Urls(original_url=original_url)
     db.session.add(urls)

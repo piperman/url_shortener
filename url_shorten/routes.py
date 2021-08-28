@@ -12,7 +12,7 @@ def redirect_to_url(short_url):
     urls.visits = urls.visits + 1
     db.session.commit()
 
-    return redirect(urls.original_url) 
+    return redirect(urls.long_url) 
 
 @shortener.route('/')
 def index():
@@ -20,13 +20,13 @@ def index():
 
 @shortener.route('/add_url', methods=['POST'])
 def add_url():
-    original_url = request.form['original_url']
-    urls = Urls(original_url=original_url)
+    long_url = request.form['long_url']
+    urls = Urls(long_url=long_url)
     db.session.add(urls)
     db.session.commit()
 
     return render_template('url_added.html', 
-        new_link=urls.short_url, original_url=urls.original_url)
+        short_url=urls.short_url, long_url=urls.long_url)
 
 @shortener.route('/stats')
 def stats():

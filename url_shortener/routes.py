@@ -1,38 +1,38 @@
 from flask import Blueprint, render_template, request, redirect
 
 from .extensions import db
-from .models import Link
+from .models import Urls
 
 shortener = Blueprint('shortener', __name__)
 
 @shortener.route('/<short_url>')
 def redirect_to_url(short_url):
-    link = Link.query.filter_by(short_url=short_url).first_or_404()
+    urls = Urls.query.filter_by(short_url=short_url).first_or_404()
 
-    link.visits = link.visits + 1
+    urls.visits = urls.visits + 1
     db.session.commit()
 
-    return redirect(link.original_url) 
+    return redirect(urls.original_url) 
 
 @shortener.route('/')
 def index():
     return render_template('index.html') 
 
-@shortener.route('/add_link', methods=['POST'])
+@shortener.route('/add_url', methods=['POST'])
 def add_link():
     original_url = request.form['original_url']
-    link = Link(original_url=original_url)
-    db.session.add(link)
+    urls = Urls(original_url=original_url)
+    db.session.add(urls)
     db.session.commit()
 
-    return render_template('link_added.html', 
-        new_link=link.short_url, original_url=link.original_url)
+    return render_template('url_added.html', 
+        new_link=urls.short_url, original_url=urls.original_url)
 
 @shortener.route('/stats')
 def stats():
-    links = Link.query.all()
+    urls = Urls.query.all()
 
-    return render_template('stats.html', links=links)
+    return render_template('stats.html', urls=urls)
 
 @shortener.errorhandler(404)
 def page_not_found(e):

@@ -6,6 +6,9 @@ Checkout repository
 From directory where checked out run:
 python -m pip install -r requirements.txt
 
+Be sure to do this from command line:
+export FLASK_APP=url_shorten
+
 Once finished, you can start it up with:
 flask run
 
